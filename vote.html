@@ -25,14 +25,5 @@
 
 </div><!-- /page -->
 
-<script>
-  $(document).on('pageshow', '#votingPage', function(event) {
-    var question = $.parseJSON(sessionStorage.getItem(0));
-    var theQuestion = question.Value;
-    console.log("Question found: " + theQuestion);
-    $('#votingPage #question').html(theQuestion);
-  });
-</script>
-
 </body>
 </html>

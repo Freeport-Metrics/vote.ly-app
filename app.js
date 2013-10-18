@@ -15,3 +15,9 @@
     $.getJSON(requestURL, callback);
   };
 
+  $(document).on('pageshow', '#votingPage', function() {
+    console.log("Question found: " + theQuestion);
+    var question = $.parseJSON(sessionStorage.getItem(0));
+    var theQuestion = question.Value;
+    $('#votingPage #question').html(theQuestion);
+  });
