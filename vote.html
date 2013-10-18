@@ -9,16 +9,14 @@
 </head>
 <body>
 
-<div data-role="page">
+<div id="votingPage" data-role="page">
 
   <div data-role="header">
     <h1>Vote.ly</h1>
   </div><!-- /header -->
 
   <div data-role="content">
-    <script>console.log("question = " + questions[0].Value);</script>
-    <h1>Question 1<h1>
-    <p>Are you in favor of allowing dogs to colonize the moon?</p>
+    <div id="question"></div>
     <form>
     <a href="thank-you.html" data-role="button">Yes</a>
     <a href="thank-you.html" data-role="button">No</a>
@@ -26,6 +24,15 @@
   </div><!-- /content -->
 
 </div><!-- /page -->
+
+<script>
+  $(document).on('pageshow', '#votingPage', function(event) {
+    var question = $.parseJSON(sessionStorage.getItem(0));
+    var theQuestion = question.Value;
+    console.log("Question found: " + theQuestion);
+    $('#votingPage #question').html(theQuestion);
+  });
+</script>
 
 </body>
 </html>

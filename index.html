@@ -35,12 +35,16 @@
         e.preventDefault();
         var votingCode = $(this).find('input#voting-code').val();
         VotingAPI.Questions.get(votingCode, function(json_data) {
-          if (json_data==[]) {
-            console.log( "That voting code was not found.  Try entering it again.")
-          } else {
+          if (typeof json_data !== 'undefined' && json_data.length > 0) {
             var questions = json_data;
             console.log(questions);
+            $.each(questions, function(i, item) {
+              console.log("storing " + i + ": " + JSON.stringify(item));
+              sessionStorage.setItem(i, JSON.stringify(item));
+            });
             $.mobile.changePage('vote.html', {transition: 'slide'});
+          } else {
+            alert( "That voting code was not found.  Try entering it again.")
           }
         })
         //   .fail(function( jqxhr, textStatus, error ) {
