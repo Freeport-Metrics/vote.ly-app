@@ -41,6 +41,7 @@
               console.log("storing " + item.Id + ": " + JSON.stringify(item));
               sessionStorage.setItem(item.Id, JSON.stringify(item));
             });
+            console.log("Looking for question " + questions[0].Id);
             showQuestion(1);
           } else {
             alert( "That voting code was not found.  Try entering it again.")

@@ -21,13 +21,14 @@
   };
 
   function showQuestion(questionId) {
-    var question = $.parseJSON(sessionStorage.getItem(questionId));
-    $('#question').html(question.Value);
     $.mobile.changePage('vote.html', {transition: 'slide'});
+    var question = $.parseJSON(sessionStorage.getItem(questionId));
+    console.log("value =" + question.Value);
     VotingAPI.Answers.get(questionId, function(answers) {
       if (typeof answers !== 'undefined' && answers.length > 0) {
         console.log(answers);
         $("#answers").html("");
+        $('#votingPage #question').html(question.Value);
         $.each(answers, function(i, item) {
           console.log("found answer " + i + ": " + JSON.stringify(item));
           $('#answers').append('<a data-role="button" name="answer" data-value="' + answers[i].Id + '" href="thank-you.html">' + answers[i].Value + "</a><br/>")
