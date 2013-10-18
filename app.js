@@ -17,32 +17,45 @@
 
   VotingAPI.Answers.submitVote = function(answerId, voterId, sessionId, callback) {
     requestURL = baseURL + '/SubmitVote?answearId=' + answerId + '&voterId=' + voterId + 'sessionId' + sessionId + '&callback=?';
-    $.post(requestURL, callback);
+    $.getJSON(requestURL, callback);
   };
+
+  function showQuestion(questionId) {
+    var question = $.parseJSON(sessionStorage.getItem(questionId));
+    $('#question').html(question.Value);
+    $.mobile.changePage('vote.html', {transition: 'slide'});
+    VotingAPI.Answers.get(questionId, function(answers) {
+      if (typeof answers !== 'undefined' && answers.length > 0) {
+        console.log(answers);
+        $("#answers").html("");
+        $.each(answers, function(i, item) {
+          console.log("found answer " + i + ": " + JSON.stringify(item));
+          $('#answers').append('<a data-role="button" name="answer" data-value="' + answers[i].Id + '" href="thank-you.html">' + answers[i].Value + "</a><br/>")
+          .trigger("create");
+        });
+        $('[name=answer]').click(function(){
+              VotingAPI.Answers.submitVote($(this).attr('data-value'), 1, 1);
+              var nextQuestionId = questionId + 1;
+              var nextQuestion = sessionStorage.getItem(nextQuestionId);
+              if (nextQuestion !== undefined && nextQuestionId < 3) {
+                showQuestion(nextQuestionId);
+                return false;
+              }
+        });
+
+      } else {
+        alert( "That question ID was not found.  That's unexpected!");
+      }
+    });
+  }
+
 
   // When question page is displayed
   $(document).on('pagebeforecreate', '#votingPage', function() {
-    console.log("Question found: " + theQuestion);
-    var question = $.parseJSON(sessionStorage.getItem(0));
-    var theQuestion = question.Value;
-    var questionId = question.Id;
-    $('#question').html(theQuestion);
-    VotingAPI.Answers.get(questionId, function(answers) {
-          if (typeof answers !== 'undefined' && answers.length > 0) {
-            console.log(answers);
-            $.each(answers, function(i, item) {
-              console.log("found answer " + i + ": " + JSON.stringify(item));
-              // $('#answers').append('<a data-role="button" name="answer" href="thank-you.html">' + answers[i].Value + "</a><br/>").click(function(){
-                  // VotingAPI.Answers.submitVote(answers[i].Id, 1, 1);
-              // })
-              // .trigger("create");
-              $('#answers').append('<a data-role="button" name="answer" data-value=' + answers[i].Id + ' href="' + baseURL + '/SubmitVote?answearId=' + answers[i].Id + '&voterId=1&sessionId=1">' + answers[i].Value + "</a><br/>").trigger("create");
-              sessionStorage.setItem(i, JSON.stringify(item));
-            });
-
-          } else {
-            alert( "That question ID was not found.  That's unexpected!");
-          }
-        })
+    // console.log("Question found: " + theQuestion);
+    // var question = $.parseJSON(sessionStorage.getItem(0));
+    // var theQuestion = question.Value;
+    // var questionId = question.Id;
+    // showQuestion(1);
   });
 

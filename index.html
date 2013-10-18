@@ -38,10 +38,10 @@
             var questions = json_data;
             console.log(questions);
             $.each(questions, function(i, item) {
-              console.log("storing " + i + ": " + JSON.stringify(item));
-              sessionStorage.setItem(i, JSON.stringify(item));
+              console.log("storing " + item.Id + ": " + JSON.stringify(item));
+              sessionStorage.setItem(item.Id, JSON.stringify(item));
             });
-            $.mobile.changePage('vote.html', {transition: 'slide'});
+            showQuestion(1);
           } else {
             alert( "That voting code was not found.  Try entering it again.")
           }
